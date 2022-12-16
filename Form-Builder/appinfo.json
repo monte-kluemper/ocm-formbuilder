@@ -1,0 +1,6 @@
+{   "type":"contentform",
+    "name":"Form-Builder",
+    "usesCustomEditors":false,
+    "create": { "sidebar" : { "expand": false } },
+    "edit": { "sidebar" : { "expand": false } }
+}

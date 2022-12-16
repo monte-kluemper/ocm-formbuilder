@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<title>Sample Content Layout Settings</title>
+
+	<!-- include sample apps styling -->
+	<link href="/_sitescloud/renderer/app/sdk/css/app-styles.css" rel="stylesheet">
+
+	<!-- include supporting files -->
+	<script type="text/javascript" src="/_sitescloud/renderer/app/apps/js/mustache.min.js"></script>
+	<script type="text/javascript" src="/_sitescloud/renderer/app/apps/js/jquery.min.js"></script>
+
+	<!-- include the Sites SDK -->
+	<script type="text/javascript" src="/_sitescloud/renderer/app/sdk/js/sites.min.js"></script>
+
+
+	<template id="settingsTemplate">
+		<div>
+			<label id="customDataLabel" for="customData" class="settings-heading">Custom Data</label>
+			<input id="customData" value="{{customData}}" placeholder="example: Custom data..."
+				class="settings-text-box" style="margin-bottom: 10px;">
+		</div>
+	</template>
+</head>
+
+<body style="display:none; margin:0px; padding:3px;background:transparent;background-image:none;">
+
+<!-- container for the settings panel -->
+<div id="settingsContainer" class="scs-component-settings">
+</div>
+
+<script type="text/javascript">
+	// get the Mustache template for the settings panel
+	var template = $('#settingsTemplate').html();
+
+	// define the viewModel object
+	var model = {};
+
+	// save whenever any updates occur
+	var lastState = '';
+	var saveUpdates = function () {
+		var saveConfig = {
+				'customData': $('#customData').val()
+			},
+			newState = JSON.stringify(saveConfig);
+
+		// if model has changed, save it
+		if (newState !== lastState) {
+			// update the last saved state
+			lastState = newState;
+
+			SitesSDK.setProperty('customSettingsData', saveConfig);
+		}
+	};
+
+	// Get custom settings and render the settings
+	SitesSDK.getProperty('customSettingsData', function (data) {
+		// update the model with the current values
+		model.customData = data.customData;
+
+		// initialize the last saved state to the fetched model
+		lastState = JSON.stringify(model);
+
+		// apply the model to the template
+		var html = Mustache.render(template, model);
+
+		// add the rendered HTML to the page
+		$('#settingsContainer').html(html);
+
+		// save updates whenever something changes
+		$('#customData').on('blur', saveUpdates);
+
+		// show the body
+		$('body').show();
+	});
+</script>
+</body>
+
+</html>

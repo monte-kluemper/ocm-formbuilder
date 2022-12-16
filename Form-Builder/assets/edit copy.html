@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<!-- This is a starter custom content form.-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://static.oracle.com/cdn/fnd/gallery/2101.2.0/OracleFont/OracleFont.min.css">
+
+  <style>
+    body {
+      font-family: "Oracle Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      font-size: 13.75px;
+      color: #161513;
+      background: #fcfbfa;
+      height: 100%;
+      min-height: 100vh;
+    }
+
+    .form-wrapper {
+      padding: 48px 32px 32px;
+      max-width: 640px;
+    }
+
+    .form-header-label {
+      font-size: 16px;
+      color: #161513;
+      margin: 0 0 20px;
+    }
+
+    .form-wrapper>hr {
+      border: 0;
+      border-bottom: 1px solid rgba(22, 21, 19, 0.1);
+      margin: 30px 0;
+    }
+
+    .system-field-container {
+      margin-bottom: 20px;
+    }
+
+    .native-file-row select,
+    .lang-row select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    .native-file-row .select-wrapper,
+    .lang-row .select-wrapper {
+      position: relative;
+    }
+
+    .native-file-row .select-wrapper::after,
+    .lang-row .select-wrapper::after {
+      content: url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtNS4zNSA4LjY0N2M0LjQzNCA0LjQ3MSA2LjY1MSA2LjcwNiA2LjY1MSA2LjcwNnMyLjIxNi0yLjIzNSA2LjY0OS02LjcwNnoiLz48L3N2Zz4=");
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      top: 9px;
+      right: 10px;
+      pointer-events: none;
+    }
+
+    .input-component::placeholder,
+    .native-file-row select:invalid,
+    .lang-row select:invalid {
+      color: rgba(22, 21, 19, 0.6);
+    }
+
+    .field-validation-wrapper {
+      display: none;
+      width: 100%;
+      background-color: #fff2de;
+      border: 1px solid #ffeaca;
+      border-top: 0;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .validation-warning-icon {
+      display: inline-block;
+      height: 16px;
+      width: 16px;
+      vertical-align: top;
+    }
+
+    .validation-warning-icon:before {
+      display: inline-block;
+      content: '';
+      background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA90lEQVR4AbSOQ3YEYRhFY9vGLNlDOA52EW2iZrFtW/NkCbFtcxI7X96L3f7Pud2Fd+8pI4OdPsXIBkyAGWCnTUCZL3KQhWIHwXWapnIAuLhu95O7Dn8GrkCwJoHO1TInke5AIqtlzoz0qiuHg0eKb4fXg5lWjESrkk3B2G61m3wP7NW4MzDJzX+BxOkCOwo/AmSm0J6RlL9kJ3B42uz9Z+C02YeBY25/CxQuFjty+GeAcMPtdzkE3D52BXD0L9gwcAdCPwf61ytcOFD5BWQDWzpvcvxojjVfqB0gI9nWjMQyMHdU58GHGnEIB+4oA6tAtGTiaRTnWgAWnHb6FrdhZAAAAABJRU5ErkJggg==");
+      height: 16px;
+      width: 16px;
+    }
+
+    .validation-content {
+      display: inline-block;
+      font-size: 13.75px;
+      width: calc(100% - 25px);
+      padding-left: 5px;
+      text-align: left;
+    }
+
+    .validation-summary {
+      font-weight: bold;
+      padding: 0 0 7px 10px;
+      vertical-align: top;
+      white-space: normal;
+    }
+
+    .validation-detail {
+      color: rgba(22, 21, 19, 0.6);
+      padding-left: 10px;
+      white-space: normal;
+    }
+
+    .validation-error {
+      border: 2px solid #ffd699;
+      margin-bottom: 0;
+    }
+
+    .doc-selector-wrapper,
+    .input-component {
+      font-size: 13.75px;
+      color: #161513;
+      height: 42px;
+      width: 100%;
+      margin: 0;
+      padding: 4px 5px;
+      box-sizing: border-box;
+      background-color: #fff;
+      border: 1px solid rgba(22, 21, 19, 0.5);
+      border-radius: 4px;
+    }
+
+    .input-filepicker {
+      padding-top: 10px;
+    }
+
+    .name-hint,
+    .slug-hint {
+      color: rgba(22, 21, 19, 0.6);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .checkbox-row label {
+      vertical-align: middle;
+    }
+
+    input[type=checkbox] {
+      margin: 0 10px 0 0;
+      vertical-align: middle;
+    }
+
+    .name-row,
+    .desc-row,
+    .lang-row,
+    .slug-row,
+    .lang-row-non-trans {
+      display: none;
+    }
+
+    .bp-wrapper {
+      max-width: 640px;
+      text-align: center;
+    }
+
+    .bp-image {
+      opacity: .3;
+    }
+
+    .bp-info-text {
+      font-size: 20px;
+      font-weight: normal;
+      margin: 14px 0 0;
+    }
+
+    .bp-details-text {
+      color: rgba(22, 21, 19, 0.6);
+      font-size: 13.75px;
+      margin: 10px 0 20px;
+    }
+
+    button {
+      border: 1px solid rgba(22, 21, 19, 0.5);
+      border-radius: 4px;
+      box-shadow: none;
+      color: #161513;
+      background: rgba(0, 0, 0, 0);
+      font-weight: normal;
+      text-shadow: none;
+      font-size: 13.75px;
+    }
+
+    .edit-btn {
+      padding: 0 16px;
+      height: 40px;
+      margin: 5px;
+    }
+
+    .mixed-value-indicator {
+      font-style: italic;
+      color: rgba(22, 21, 19, 0.6);
+    }
+
+    .mixed-lang-wrapper,
+    .mixed-translate-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(22, 21, 19, 0.5);
+      border-radius: 4px;
+      min-height: 40px;
+      padding: 10px;
+      justify-content: space-between;
+    }
+
+    .label-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    .nontrans-label {
+      font-size: 16px;
+      color: rgba(22, 21, 19, 0.6);
+      flex: 1 1 auto;
+    }
+
+    .item-label {
+      font-size: 16px;
+      color: rgba(22, 21, 19, 0.6);
+      margin-bottom: 6px;
+      flex: 1 1 auto;
+    }
+
+    #name-translate-indicator,
+    #desc-translate-indicator {
+      font-size: 12px;
+      color: rgba(22, 21, 19, 0.6);
+      align-self: flex-end;
+      margin-bottom: 6px;
+    }
+
+    .native-file-row,
+    .docs-chooser-row,
+    .file-chooser-row {
+      display: none;
+    }
+
+    .pick-doc-btn {
+      margin-top: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-wrapper">
+    <h2 class="form-header-label">Content Item Properties</h2>
+
+    <!--name field-->
+    <div class="system-field-container name-row">
+      <div class="label-wrapper">
+        <label class="item-label">Name</label>
+        <span id="name-translate-indicator"></span>
+      </div>
+      <div id="name-field">
+        <div class="input-wrapper">
+          <input class='input-component' id="name-input" type="text" placeholder="Content item name">
+        </div>
+        <div class="field-validation-wrapper">
+          <div class="validation-warning-icon" title="Warning" role="img"></div>
+          <div class="validation-content">
+            <div class="validation-summary"></div>
+            <div class="validation-detail"></div>
+          </div>
+        </div>
+      </div>
+      <div class="name-hint">
+      </div>
+    </div>
+
+    <!--description field-->
+    <div class="system-field-container desc-row">
+      <div class="label-wrapper">
+        <label class="item-label">Description (Optional)</label>
+        <span id="desc-translate-indicator"></span>
+      </div>
+      <div id="desc-field">
+        <div class="input-wrapper">
+          <input class='input-component' id="description-input" type="text" placeholder="Content item description">
+        </div>
+        <div class="field-validation-wrapper">
+          <div class="validation-warning-icon" title="Warning" role="img"></div>
+          <div class="validation-content">
+            <div class="validation-summary"></div>
+            <div class="validation-detail"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--slug field-->
+    <div class="system-field-container slug-row">
+      <div class="label-wrapper">
+        <label class="item-label">Friendly Item Name for URL</label>
+      </div>
+      <div id="slug-field">
+        <div class="input-wrapper">
+          <input class='input-component' id="slug-input" type="text" placeholder="Enter friendly item name">
+        </div>
+        <div class="field-validation-wrapper">
+          <div class="validation-warning-icon" title="Warning" role="img"></div>
+          <div class="validation-content">
+            <div class="validation-summary"></div>
+            <div class="validation-detail"></div>
+          </div>
+        </div>
+      </div>
+      <div class="slug-hint">
+      </div>
+    </div>
+
+    <!--language dropdown-->
+    <div class="system-field-container lang-row">
+      <div class="label-wrapper">
+        <label class="item-label">Language</label>
+      </div>
+      <div class="mixed-lang-wrapper">
+        <span class="mixed-value-indicator">Mixed values</span>
+        <button class="edit-btn" id="mixed-lang">Edit</button>
+      </div>
+      <div id="lang-field">
+        <div class="select-wrapper">
+          <select class='input-component' id="language-select" required></select>
+        </div>
+        <div class="field-validation-wrapper">
+          <div class="validation-warning-icon" title="Warning" role="img"></div>
+          <div class="validation-content">
+            <div class="validation-summary"></div>
+            <div class="validation-detail"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--non translabele checkbox-->
+    <div class="system-field-container lang-row lang-row-non-trans">
+      <label class="nontrans-label">Non Translatable</label>
+      <div class="mixed-translate-wrapper">
+        <span class="mixed-value-indicator">Mixed values</span>
+        <button class="edit-btn" id="mixed-translate">Edit</button>
+      </div>
+      <div class="checkbox-row">
+        <input class="field-checkbox" type="checkbox" id="nonTranslatableCheckbox" name="Non Translatable">
+        <label for="nonTranslatableCheckbox">Non Translatable</label>
+      </div>
+    </div>
+
+    <!--native file option select row-->
+    <div class="system-field-container native-file-row">
+      <div class="label-wrapper">
+        <label class="item-label">Native File</label>
+      </div>
+      <div id="native-file-field">
+        <div class="select-wrapper">
+          <select class='input-component' id="native-file-select" required></select>
+        </div>
+      </div>
+    </div>
+
+    <!--file row-->
+    <div class="system-field-container file-chooser-row">
+      <div class="label-wrapper">
+        <label class="item-label">Select File</label>
+      </div>
+      <div id="file-field">
+        <div class="input-wrapper">
+          <input class='input-component input-filepicker' id="file-input" type="file">
+        </div>
+        <div class="field-validation-wrapper">
+          <div class="validation-warning-icon" title="Warning" role="img"></div>
+          <div class="validation-content">
+            <div class="validation-summary"></div>
+            <div class="validation-detail"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- document chooser row-->
+    <div class="system-field-container docs-chooser-row">
+      <div class="label-wrapper">
+        <label class="item-label">Select Document</label>
+      </div>
+      <div id="docs-field">
+        <div class="doc-selector-wrapper">
+          <button class="pick-doc-btn" id="docpicker-btn">Choose Document</button>
+          <span id="docs-input"></span>
+        </div>
+        <div class="field-validation-wrapper">
+          <div class="validation-warning-icon" title="Warning" role="img"></div>
+          <div class="validation-content">
+            <div class="validation-summary"></div>
+            <div class="validation-detail"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <!--Field boilerplate-->
+    <div class="bp-wrapper">
+      <img class="bp-image" src="images/warning.svg" role="presentation" alt="">
+      <h3 class="bp-info-text">The custom form will replace the default form</h3>
+      <div class="bp-details-text">Modify the starter form code to create your form layout, add data fields, position
+        fields, and style the form as needed.</div>
+    </div>
+
+    <!-- Fields rendering can go here -->
+  </div>
+</body>
+
+<!-- load the content form SDK -->
+<script src="/documents/static/gemini/api/content-form-sdk-1.0.js"></script>
+<script>
+  /* globals contentFormSDK */
+  (function () {
+
+    var item, type, isSlugEnabled, formOptions;
+
+    // displays validation error msg against the element for given selector
+    function showValidationError(validationObj, selector) {
+      if (validationObj && selector) {
+        var errorSummary = validationObj.errorMessageSummary || '';
+        var errorDetail = validationObj.errorMessageDetail || '';
+        var validationElement = document.querySelector(selector + ' .field-validation-wrapper');
+        if (validationElement) {
+          var inputWrapper = document.querySelector(selector);
+          if (inputWrapper) {
+            inputWrapper.classList.add('validation-error');
+          }
+          var validationSummaryElement = validationElement.querySelector('.validation-summary');
+          var validationDetailElement = validationElement.querySelector('.validation-detail');
+          validationElement.style.display = 'block';
+          if (validationSummaryElement) {
+            validationSummaryElement.innerHTML = errorSummary;
+          }
+          if (validationDetailElement) {
+            validationDetailElement.innerHTML = errorDetail;
+          }
+        }
+      }
+    }
+
+    // removes validation error msg against the element for given selector
+    function hideValidationError(selector) {
+      if (selector) {
+        var inputWrapper = document.querySelector(selector);
+        var validationElement = document.querySelector(selector + ' .field-validation-wrapper');
+        if (validationElement) {
+          validationElement.style.display = 'none';
+        }
+        if (inputWrapper) {
+          inputWrapper.classList.remove('validation-error');
+        }
+      }
+    }
+
+    // validates form
+    function validateForm() {
+      var isValid = true;
+      var message = '';
+      if (!item.get().name) {
+        isValid = false;
+        message = 'Name is required.'
+      }
+      if (!formOptions || formOptions.supportsRequiredValidation) {
+        if (isSlugEnabled && (!formOptions || formOptions.supportsSetSlug)) {
+          if (!item.get().slug) {
+            isValid = false;
+            message = 'Friendly item name for URL is required.'
+          }
+        }
+        if (item.isNew() && (!formOptions || formOptions.supportsSetLanguage)) {
+          if (!item.get().language) {
+            isValid = false;
+            message = 'Language is required.'
+          }
+        }
+      }
+      var validationElements = document.getElementsByClassName('field-validation-wrapper');
+      Array.from(validationElements).forEach(function (elem) {
+        if (elem.style.display === 'block') {
+          isValid = false;
+          message = 'This form has invalid values.'
+        }
+      });
+      return {
+        isValid: isValid,
+        message: message
+      }
+    }
+
+    function initForm(sdk) {
+      // type
+      type = sdk.getType();
+
+      var caasTranslations = type.getCaasTranslations();
+
+      // item being rendered in the form
+      item = sdk.getItem();
+
+      formOptions = (typeof item.getFormOptions === 'function') ? item.getFormOptions() : null;
+
+      // current locale of the UI
+      var locale = sdk.getLocale();
+
+      // fields of the item
+      var fields = item.getFields();
+
+      //item properties
+      var itemProps = item.get();
+
+      // repository's  default language
+      var defaultLang = sdk.getRepositoryDefaultLanguage();
+
+      // validation call back registeration
+      sdk.registerFormValidation(validateForm);
+
+      var slug = type.getSlug();
+      isSlugEnabled = slug.enabled;
+      var isSlashAllowed = slug['allow-forward-slash'] ? slug['allow-forward-slash'] : false;
+
+      item.on('update', function (props) {
+        //sync up item properties when item is updated
+        itemProps = props;
+
+        // get updated form options on save
+        formOptions = (typeof item.getFormOptions === 'function') ? item.getFormOptions() : null;
+
+        // if supportsSetTranslatable is false, hide the non trnalatable controlls
+        if (formOptions && !formOptions.supportsSetTranslatable) {
+          var nonTranslateEl = document.querySelector('.lang-row-non-trans');
+          var nonTranslateLabelEl = document.querySelector('.nontrans-label');
+          if (nonTranslateEl) {
+            nonTranslateEl.style.display = 'none';
+          }
+          if (nonTranslateLabelEl) {
+            nonTranslateLabelEl.style.display = 'none';
+          }
+        }
+
+        // hide the native file controlls if supportsSetNativeFile is false
+        if (formOptions && !formOptions.supportsSetNativeFile) {
+          var nativeFileRow = document.querySelector('.native-file-row');
+          var fileRow = document.querySelector('.file-chooser-row');
+          var docsRow = document.querySelector('.docs-chooser-row');
+          if (nativeFileRow) {
+            nativeFileRow.style.display = 'none';
+          }
+          if (fileRow) {
+            fileRow.style.display = 'none';
+          }
+          if (docsRow) {
+            docsRow.style.display = 'none';
+          }
+        }
+
+      });
+
+      //adjust title based on type category
+      if (type.typeCategory === 'DigitalAssetType') {
+        var titleElement = document.querySelector('.form-header-label');
+        if (titleElement) {
+          titleElement.innerText = 'Asset Properties';
+        }
+      }
+
+      var nameInheritFromMaster = caasTranslations && caasTranslations.hasOwnProperty('name') && caasTranslations.name.hasOwnProperty('inheritFromMaster') ? caasTranslations.name.inheritFromMaster : false;
+      var descInheritFromMaster = caasTranslations && caasTranslations.hasOwnProperty('description') && caasTranslations.description.hasOwnProperty('inheritFromMaster') ? caasTranslations.description.inheritFromMaster : false;
+      var isMaster = itemProps.languageIsMaster;
+      var nameDoNotTranslate = caasTranslations && caasTranslations.hasOwnProperty('name') && caasTranslations.name.hasOwnProperty('translate') ? !caasTranslations.name.translate : false;
+      var descDoNotTranslate = caasTranslations && caasTranslations.hasOwnProperty('description') && caasTranslations.description.hasOwnProperty('translate') ? !caasTranslations.description.translate : false;
+
+      // name
+      var nameHint = "The item name should not contain the following characters: ;\":?<%>{}/\\|*",
+        nameHintElement = document.querySelector('.name-hint');
+      if (nameHintElement) {
+        nameHintElement.innerText = nameHint;
+      }
+      if (!formOptions || formOptions.supportsSetName) {
+        var nameRow = document.getElementsByClassName('name-row')[0];
+        nameRow.style.display = 'block';
+        var nameField = document.getElementById('name-input');
+        nameField.value = itemProps.name ? itemProps.name : '';
+        nameField.addEventListener('change', function (e) {
+          item.validateName(nameField.value).then(function (validation) {
+            if (validation && validation.isValid) {
+              // set name for the item
+              hideValidationError('#name-field');
+              item.setName(nameField.value);
+            } else {
+              // handle invalidation errors
+              showValidationError(validation, '#name-field');
+            }
+          }).catch(function (error) {
+            // handle error
+            console.error('Error while invoking item.validateName:', error);
+          });
+        });
+
+        if (!isMaster) {
+          var nameTranslateElement = document.getElementById('name-translate-indicator');
+          if (nameInheritFromMaster) {
+            nameField.disabled = true;
+            if (nameTranslateElement) {
+              nameTranslateElement.innerText = "Inherit from master";
+            }
+          } else {
+            if (nameDoNotTranslate) {
+              if (nameTranslateElement) {
+                nameTranslateElement.innerText = "Do not translate";
+              }
+            }
+          }
+        }
+      }
+
+      //desc
+      if (!formOptions || formOptions.supportsSetDescription) {
+        var descRow = document.getElementsByClassName('desc-row')[0];
+        descRow.style.display = 'block';
+        var descField = document.getElementById('description-input');
+        descField.value = itemProps.description ? itemProps.description : '';
+        descField.addEventListener('change', function (e) {
+          item.validateDescription(descField.value).then(function (validation) {
+            if (validation && validation.isValid) {
+              // set description for the item
+              hideValidationError('#desc-field');
+              item.setDescription(descField.value);
+            } else {
+              // handle invalidation errors
+              showValidationError(validation, '#desc-field');
+            }
+          }).catch(function (error) {
+            // handle error
+            console.error('Error while invoking item.validateDescription:', error);
+          });
+        });
+
+        if (!isMaster) {
+          var descTranslateElement = document.getElementById('desc-translate-indicator');
+          if (descInheritFromMaster) {
+            descField.disabled = true;
+            if (descTranslateElement) {
+              descTranslateElement.innerText = "Inherit from master";
+            }
+          } else {
+            if (descDoNotTranslate) {
+              if (descTranslateElement) {
+                descTranslateElement.innerText = "Do not translate";
+              }
+            }
+          }
+        }
+      }
+
+      //language
+      if (!formOptions || formOptions.supportsSetLanguage) {
+        var langOptions = item.getLanguageOptions();
+        if (langOptions && langOptions.length > 0) {
+          var langRow = document.getElementsByClassName('lang-row')[0];
+          var mixedLangDiv = document.getElementsByClassName('mixed-lang-wrapper')[0];
+          mixedLangDiv.style.display = 'none';
+          langRow.style.display = 'block';
+          var options = '';
+          // if item has language, set or else check if it is master, set reposity default.
+          var langToSet = itemProps.language ? itemProps.language : (isMaster ? defaultLang : '');
+          if (langOptions && langOptions.length > 0) {
+            options += '<option value="" disabled selected>Select a language</option>';
+            langOptions.forEach(function (option) {
+              var selected = (option.value === langToSet) ? 'selected' : '';
+              options += '<option value="' + option.value + '" ' + selected + '>' + option.label + '</option>';
+            });
+            var langSelect = document.getElementById('language-select');
+            langSelect.innerHTML = options;
+            if (langToSet) {
+              item.setLanguage(langToSet, { silent: true });
+            }
+            langSelect.addEventListener('change', function (e) {
+              item.setLanguage(langSelect.value);
+            });
+          }
+
+          if (formOptions.mixedLanguages) {
+            var langField = document.getElementById('lang-field');
+            langField.style.display = 'none';
+            mixedLangDiv.style.display = 'flex';
+            var mixedLangBtn = document.getElementById('mixed-lang');
+            mixedLangBtn.addEventListener('click', function (e) {
+              langField.style.display = 'block';
+              mixedLangDiv.style.display = 'none';
+              langSelect.value = defaultLang;
+              item.setLanguage(defaultLang);
+            }, false);
+          }
+        }
+      }
+
+      //non-translatable
+      if (!formOptions || formOptions.supportsSetTranslatable) {
+        if (item.isNew()) {
+          var langNonTransRow = document.getElementsByClassName('lang-row-non-trans')[0];
+          var mixedWrpperDiv = document.getElementsByClassName('mixed-translate-wrapper')[0];
+          var nonTransLabel = document.getElementsByClassName('nontrans-label')[0];
+          nonTransLabel.style.display = 'none';
+          mixedWrpperDiv.style.display = 'none';
+          langNonTransRow.style.display = 'block';
+          var nonTranslatableCheckbox = document.getElementById('nonTranslatableCheckbox');
+          if (itemProps.translatable) {
+            nonTranslatableCheckbox.removeAttribute("checked");
+          } else {
+            nonTranslatableCheckbox.setAttribute("checked", "checked");
+          }
+          nonTranslatableCheckbox.addEventListener('change', function (e) {
+            item.setTranslatable(!nonTranslatableCheckbox.checked == true);
+          });
+
+          if (formOptions.mixedTranslatable) {
+            var checkBoxRow = document.getElementsByClassName('checkbox-row')[0];
+            checkBoxRow.style.display = 'none';
+            mixedWrpperDiv.style.display = 'flex';
+            nonTransLabel.style.display = 'block'
+            var mixedTranslateBtn = document.getElementById('mixed-translate');
+            mixedTranslateBtn.addEventListener('click', function (e) {
+              checkBoxRow.style.display = 'block';
+              mixedWrpperDiv.style.display = 'none';
+              nonTransLabel.style.display = 'none';
+              nonTranslatableCheckbox.removeAttribute('checked');
+              item.setTranslatable(true);
+            }, false);
+          }
+        }
+      }
+
+      // display friendly url field if it is enabled in type
+      if (isSlugEnabled && (!formOptions || formOptions.supportsSetSlug)) {
+        var slugRow = document.getElementsByClassName('slug-row')[0];
+        if (slugRow) {
+          slugRow.style.display = 'block';
+        }
+
+        var slugHint = "The friendly item name should not contain the following characters: \" # % &  : ; < > = ? @ [ ] \\ ^ ` { } | ~ /";
+        if (isSlashAllowed) {
+          slugHint = "The friendly item name should not contain the following characters: \" # % &  : ; < > = ? @ [ ] \\ ^ ` { } | ~ ";
+        }
+
+        var slugHintElement = document.querySelector('.slug-hint');
+        if (slugHintElement) {
+          slugHintElement.innerText = slugHint;
+        }
+
+        //slug
+        var slugField = document.getElementById('slug-input');
+        slugField.value = itemProps.slug ? itemProps.slug : '';
+        slugField.addEventListener('change', function (e) {
+          item.validateSlug(slugField.value).then(function (validation) {
+            if (validation && validation.isValid) {
+              hideValidationError('#slug-field');
+              item.setSlug(slugField.value);
+            } else {
+              // handle invalidation errors
+              showValidationError(validation, '#slug-field');
+            }
+          }).catch(function (error) {
+            // handle error
+            console.error('Error while invoking item.validateSlug:', error);
+          });
+        });
+      }
+
+      if (formOptions.supportsSetNativeFile) {
+        //disaply native file select
+        var nativeFileRow = document.querySelector('.native-file-row');
+        if (nativeFileRow) {
+          nativeFileRow.style.display = 'block';
+        }
+
+        // build the file option dropdown
+        var nativeFileSelect = document.getElementById('native-file-select'),
+          nativeFileOptions = (typeof item.getNativeFileOptions === 'function') ? item.getNativeFileOptions() : null,
+          options = '';
+        var masterId = '';
+        if (nativeFileOptions && nativeFileOptions.length > 0) {
+          nativeFileOptions.forEach(function (option) {
+            var selected = (option.hasOwnProperty('languageIsMaster') && option.languageIsMaster) ? 'selected' : '';
+            options += '<option data-action="' + option.action + '" value="' + option.value + '" ' + selected + '>' + option.label + '</option>';
+            if (option.hasOwnProperty('languageIsMaster') && option.languageIsMaster) {
+              masterId = option.value;
+            }
+          });
+          nativeFileSelect.innerHTML = options;
+        }
+        nativeFileSelect.addEventListener('change', function (e) {
+          // reset to use default master source file
+          item.setSourceId(masterId, { silent: true });
+
+          var selectedOption = nativeFileSelect.options[nativeFileSelect.selectedIndex],
+            selectedAction = selectedOption.getAttribute('data-action'),
+            selectedValue = nativeFileSelect.value,
+            fileRow = document.querySelector('.file-chooser-row'),
+            docsRow = document.querySelector('.docs-chooser-row');
+
+          if (selectedAction === 'add-from-computer') {
+            //display file picker control and hide doc picker
+            if (fileRow) {
+              fileRow.style.display = 'block';
+            }
+            if (docsRow) {
+              docsRow.style.display = 'none';
+            }
+          }
+          else if (selectedAction === 'add-from-documents') {
+            // hide file chooser and display document picker
+            var docField = document.getElementById('docs-input');
+            if (fileRow) {
+              fileRow.style.display = 'none';
+            }
+            if (docsRow) {
+              docsRow.style.display = 'block';
+              if (docField) {
+                docField.innerHTML = '';
+              }
+              hideValidationError('#docs-field');
+            }
+          }
+          else if (selectedAction === 'add-from-translation') {
+            if (fileRow) {
+              fileRow.style.display = 'none';
+            }
+            if (docsRow) {
+              docsRow.style.display = 'none';
+            }
+            item.setSourceId(selectedValue);
+          }
+          else {
+            if (fileRow) {
+              fileRow.style.display = 'none';
+            }
+            if (docsRow) {
+              docsRow.style.display = 'none';
+            }
+          }
+        });
+
+        // file picker control and action
+        var fileField = document.getElementById('file-input');
+        fileField.addEventListener('change', function (e) {
+          var fileList = fileField.files;
+          if (fileList && fileList[0]) {
+            // check chosen file is valid
+            item.validateNativeFile(fileList[0]).then(function (validation) {
+              if (validation && validation.isValid) {
+                // set file
+                hideValidationError('#file-field');
+                item.setNativeFile(fileList[0]);
+              } else {
+                // handle invalidation errors
+                showValidationError(validation, '#file-field');
+              }
+            }).catch(function (error) {
+              // handle error
+              console.error('Error while invoking item.validateNativeFile:', error);
+            });
+          } else {
+            item.setNativeFile();
+          }
+        });
+
+        // document picker controll
+        var docChooserBtn = document.getElementById('docpicker-btn');
+        docChooserBtn.addEventListener('click', function (e) {
+          item.openDocumentPicker().then(function (doc) {
+            var docField = document.getElementById('docs-input');
+            // display selected document (just name)
+            if (doc) {
+              if (doc.name && docField) {
+                docField.innerHTML = doc.name;
+              }
+              item.validateDocument(doc).then(function (validation) {
+                if (validation && validation.isValid) {
+                  // set document
+                  hideValidationError('#docs-field');
+                  item.setDocument(doc);
+                } else {
+                  // handle invalidation errors
+                  showValidationError(validation, '#docs-field');
+                }
+              }).catch(function (error) {
+                // handle error
+                console.error('Error while invoking item.validateNativeFile:', error);
+              });
+            }
+          }).catch(function (error) {
+            // handle error
+            console.error('Error while invoking item.openDocumentPicker:', error);
+          });
+
+        }, false);
+
+      }
+
+      // rendering of fields can follow
+    }
+
+    // this is the entry point to initialize the form sdk.
+    contentFormSDK.init(initForm);
+
+  })();
+</script>
+
+</html>
