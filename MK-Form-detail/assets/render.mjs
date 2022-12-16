@@ -141,8 +141,8 @@ export default class {
 
 								//
 								// Replace these variables with your instance values
-								var rest = "https://demo-oce0002.cec.ocp.oraclecloud.com/content/management/api/v1.1/items";
-								var auth = "Basic Zm9ybXVzZXI6V2VsY29tZTEyMzQ1";
+								var rest = "https://[OCM URL]/content/management/api/v1.1/items";
+								var auth = "Basic [AUTH TOKEN]"
 
 								var options = {
 									method: 'POST',
