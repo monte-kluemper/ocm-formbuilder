@@ -102,35 +102,42 @@ export default class {
 							e.preventDefault();
 							if( typeof SCSRenderAPI != 'undefined' ) { SCSRenderAPI.recordAssetOperation(this.id, 'download'); }
 							var form = e.currentTarget;
-							var formData = new FormData(form);
-							var formName = contentName;
-							var name = formName;
-							var description = "";
-							var assetType = "FormData";
-							var formFields = {};
-							// Create JSON with form fields
-							for (const entry of formData.entries()) {
-								formFields[entry[0]] = entry[1];
-								// Set name to first name field
-								if(entry[0].toLowerCase().includes("name") && name==formName ) {
-									name = entry[1].replace(/[^a-zA-Z0-9 \-]/g, '');
-								}
-								// Set description to first email field
-								if(entry[0].toLowerCase().includes("email") && description=="" ) {
-									description = entry[1];
-								}
-							}
-							//console.log("Fields:"+JSON.stringify(formFields));
 
-							//console.log("Form Action = "+form.action);
-							// Format of action URL - "https://ocm/B63CB6989A534C14A49F304834DE0BEF";
+							var rest = form.action;
+							var options = {};
+
 							var action = form.action.split("/");
-							if( action[2] == "ocm" ) {
+
+							// Format of action URL - "https://ocm/[RespositoryID]";
+							if( action[2].toLowerCase() == "ocm" ) {
 								var repo = action[3];
-								var body = {
+								if( !repo ) { repo = "B63CB6989A534C14A49F304834DE0BEF"; }
+
+								var formData = new FormData(form);
+								var formName = contentName;
+								var name = "";
+								var desc = "";
+								var formFields = {};
+								// Create JSON with form fields
+								for (const entry of formData.entries()) {
+									formFields[entry[0]] = entry[1];
+									// Set name to first name field
+									if(entry[0].toLowerCase().includes("name") && name=="" ) {
+										name = entry[1].replace(/[^a-zA-Z0-9 \-]/g, '');
+									}
+									// Set description to first email field
+									if(entry[0].toLowerCase().includes("email") && desc=="" ) {
+										desc = entry[1];
+									}
+								}
+								if(name=="") name = formName;
+								//console.log("Fields:"+JSON.stringify(formFields));
+	
+
+								var createAssetPayload = {
 									"name" : name,
-									"type" : assetType,
-									"description" : description,
+									"type" : "FormData",
+									"description" : desc,
 									"repositoryId" : repo,
 									"translatable" : "false",
 									"fields" : {
@@ -139,33 +146,51 @@ export default class {
 									}
 								};
 
-								//
-								// Replace these variables with your instance values
-								var rest = "https://[OCM URL]/content/management/api/v1.1/items";
-								var auth = "Basic [AUTH TOKEN]"
+								rest = "https://"+location.hostname+"/content/management/api/v1.1/items";
 
-								var options = {
+								// For anonymous forms, you will need to configure a user or app to create assets in OCM
+								var auth = "Basic Zm9ybXVzZXI6V2VsY29tZTEyMzQ1";
+								var cred = "omit";
+
+								// If the form is for authenticated users only, you can use these values:
+								//var auth = "Session";
+								//var cred = "include";
+
+								options = {
 									method: 'POST',
 									headers: {
 										"Content-Type" : "application/json",
 										"X-Requested-With" : "XMLHttpRequest",
 										"Authorization" : auth
 									},
-									body: JSON.stringify(body)
+									credentials: cred,
+									body: JSON.stringify(createAssetPayload)
 								}
-								//console.log("options = "+JSON.stringify(options));
+								//console.log("Form Options = "+JSON.stringify(options));
 
-								fetch(rest, options)
-								.then(response => {
-									if (!response.ok) {
-										throw new Error('Network response was not OK');
-								  	}
-								})
-								.catch((error) => {
-									console.error('Error:', error);
-								});
 
+							// Logic for Responsys
+							} else if( action[2].toLowerCase() == "responsys" ) {
+								var formData = new FormData(form);
+								// Set REST URL for calling Responsys
+								// Set Fetch Options
+								// Set Campaign value in form data
+
+
+
+							// Additional options can be configured here.
 							}
+
+							fetch(rest, options)
+							.then(response => {
+								console.log("Form response = "+response.formData.toString());
+								if (!response.ok) {
+									throw new Error('Network response was not OK');
+								  }
+							})
+							.catch((error) => {
+								console.error('Error:', error);
+							});
 
 							document.getElementById("form-container").style.display = 'none';
 							document.getElementById("form-response").style.display = 'block';
